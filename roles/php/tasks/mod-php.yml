@@ -1,0 +1,4 @@
+---
+- name: Add PHP.ini file
+  sudo: yes
+  template: src=php.ini.tpl dest=/etc/php5/apache2/php.ini

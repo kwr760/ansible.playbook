@@ -1,0 +1,38 @@
+- name: Install
+  apt: pkg=php5-dev=5.6.16+dfsg-2+deb.sury.org~trusty+1 state=present force=yes
+  when: php.pecl_packages is defined
+
+- name: Install libxml2
+  apt: pkg=libxml2-dev=2.9.1+dfsg1-3ubuntu4.5 state=present force=yes
+
+- name: Install php5 gd
+  apt: pkg=php5-gd=5.6.16+dfsg-2+deb.sury.org~trusty+1 state=present force=yes
+
+- name: Install Package
+  shell: echo "\n\n\n\n\n\n\n\n\n" | pecl install {{ item }}
+  register: pecl_result
+  changed_when: "'already installed' not in pecl_result.stdout"
+  failed_when: "pecl_result.stderr or ('ERROR' in pecl_result.stdout)"
+  with_items: php.pecl_packages_versions
+  when: php.pecl_packages_versions is defined
+
+- name: Create extension .ini file
+  template: >
+    src="extension.tpl"
+    dest="/etc/php5/mods-available/{{ item }}.ini"
+    owner="root"
+    group="root"
+    mode=0644
+  with_items: php.pecl_packages
+  when: php.pecl_packages is defined
+
+- name: Enable extension
+  shell: php5enmod {{ item }} creates=/etc/php5/apache2/conf.d/20-{{ item }}.ini
+  with_items: php.pecl_packages
+  when: php.pecl_packages is defined
+
+- name: Install memcached defaults
+  copy: src=memcached-config.ini dest=/etc/php5/mods-available/memcached-config.ini
+
+- name: Enable memcached values
+  shell: php5enmod memcached-config creates=/etc/php5/apache2/conf.d/20-memcached-config.ini

@@ -1,0 +1,99 @@
+---
+- name: Install Apache Bin
+  apt: name=apache2-bin state=present force=yes
+
+- name: Install Apache
+  apt: name=apache2-data state=present force=yes
+
+- name: Install Apache
+  apt: name=apache2 state=present force=yes
+
+- name: Install Apache2 Utils
+  apt: name=apache2-utils state=present force=yes
+
+- name: Lock apache version
+  command: apt-mark hold apache2
+
+- name: Create error log directory
+  file: path=/var/log/apache2 state=directory mode=0755
+
+- name: Disable mpm_event
+  apache2_module: state=absent name=mpm_event
+  notify: restart apache2
+
+- name: Install Modules
+  apache2_module: state=present name={{ item }}
+  with_items:
+    - mpm_prefork
+    - rewrite
+    - vhost_alias
+    - headers
+    - expires
+    - filter
+  notify: restart apache2
+
+- shell: apache2 -v
+  register: apache_version
+
+- name: Open SSL Port
+  sudo: yes
+  command: ufw allow 443/tcp
+
+- name: Enable SSL Mod
+  sudo: yes
+  command: a2enmod ssl
+  notify: restart apache2
+
+- name: Enable Mod Headers
+  sudo: yes
+  command: a2enmod headers
+  notify: restart apache2
+
+- name: Add Intelius conf
+  sudo: yes
+  template: src=etc/apache2/sites-available/intelius.conf.tpl dest=/etc/apache2/sites-available/intelius.conf
+  notify: restart apache2
+
+- name: Add apache2 conf
+  sudo: yes
+  template: src=etc/apache2/apache2.conf.tpl dest=/etc/apache2/apache2.conf
+  notify: restart apache2
+
+- name: Enable Intelius sites-available
+  sudo: yes
+  command: a2ensite intelius.conf
+  args:
+    creates: /etc/apache2/sites-enabled/intelius.conf
+  notify: restart apache2
+
+- debug: msg="System {{ server.hostname }} has fact {{ apache_ssl_certificate_file }}"
+
+- name: Add Intelius conf
+  sudo: yes
+  template: src=etc/apache2/sites-available/intelius-ssl.conf.tpl dest=/etc/apache2/sites-available/intelius-ssl.conf
+  notify: restart apache2
+
+- name: Enable Intelius sites-available
+  sudo: yes
+  command: a2ensite intelius-ssl.conf
+  args:
+    creates: /etc/apache2/sites-enabled/intelius-ssl.conf
+  notify: restart apache2
+
+- name: Add Management Conf
+  sudo: yes
+  template: src=management.conf.tpl dest=/etc/apache2/sites-available/management.conf
+  notify: restart apache2
+
+- name: Disable HTTP default
+  sudo: yes
+  command: a2dissite 000-default.conf
+  notify: restart apache2
+
+- name: Create apache group
+  group: name=apache state=present
+
+- include: conf.d.yml
+
+- name: Add www-data to apache group
+  user: name=www-data groups=www-data append=yes

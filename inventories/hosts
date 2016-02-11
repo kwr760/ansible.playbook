@@ -1,0 +1,3 @@
+[dev-environment]
+    latitude user=roy hostname=latitude
+    vm user=roy hostname=vm

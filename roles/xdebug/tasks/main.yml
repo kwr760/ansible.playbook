@@ -1,0 +1,12 @@
+---
+- name: Install xDebug
+  sudo: yes
+  apt: pkg=php5-xdebug=2.3.2-1+deb.sury.org~trusty+1 state=present force=yes
+
+- name: Add xDebug cli ini file
+  sudo: yes
+  template: src=xdebug.ini.tpl dest=/etc/php5/cli/conf.d/50-xdebug.ini force=no
+
+- name: Add xDebug apache ini file
+  sudo: yes
+  template: src=xdebug.ini.tpl dest=/etc/php5/apache2/conf.d/50-xdebug.ini force=no

@@ -1,0 +1,24 @@
+- hosts: all
+  sudo: true
+  vars_files:
+    - vars/all.yml
+  roles:
+    - apache
+    - app
+    - chrome
+    - code-quality
+    - firefox
+    - git
+    - isys
+    - java8
+    - memcached
+    - mysql
+    - php
+    - postfix
+    - prop
+    - samba
+    - script
+    - server
+    - vagrant_local
+
+    - xdebug

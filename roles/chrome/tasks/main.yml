@@ -1,0 +1,3 @@
+---
+- name: Install chrome from aptitude
+  apt: name=chromium-browser state=latest
