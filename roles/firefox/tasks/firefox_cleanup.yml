@@ -1,4 +1,0 @@
----
-- name: Remove temporary directory
-  file: path='{{firefox_temp_dir.stdout}}' state='absent'
-  when: firefox_temp_dir.changed

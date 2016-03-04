@@ -1,0 +1,8 @@
+---
+mysql:
+    install: '1'
+    root_password: 'kroy!001'
+    database: db1
+    user: web
+    password: kroy!002
+    dump: ''

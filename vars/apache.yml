@@ -1,0 +1,18 @@
+---
+apache:
+  install: '1'
+  cert_dir: /etc/ssl
+  conf:
+    start_servers: 5
+    min_spare_servers: 5
+    max_spare_servers: 10
+    server_limit: 100
+    max_request_workers: 100
+    keep_alive_timeout: 2
+    server_tokens: "OS"
+    server_signature: "On"
+  packages: [
+    libssh2-1=1.4.3-2,
+    libssh2-1-dev=1.4.3-2,
+    libdb5.1-dev=5.1.29-7ubuntu1
+  ]

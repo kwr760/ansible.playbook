@@ -1,7 +1,0 @@
----
-- debug: var=server.hostname
-
-- name: Add isys configuration
-  sudo: yes
-  template: src=isys.conf.tpl dest=/usr/local/etc/isys.conf
-

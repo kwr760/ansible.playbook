@@ -7,9 +7,9 @@
   sudo: yes
   apt: pkg={{ item }} state=present force=yes
   with_items:
-    - curl=7.35.0-1ubuntu2.5
-    - wget=1.15-1ubuntu1.14.04.1
-    - python-software-properties=0.92.37.6
+    - curl
+    - wget
+    - python-software-properties
 
 - name: Install Extra Packages
   sudo: yes

@@ -1,0 +1,8 @@
+---
+server:
+  install: '1'
+  hostname: "{{(hostname is defined) | ternary(hostname, ansible_hostname)}}"
+  timezone: America/Los_Angeles
+  locale: en_US.UTF-8
+  ntp_servers: [63.251.161.1, 63.251.161.33] #These are internap servers
+

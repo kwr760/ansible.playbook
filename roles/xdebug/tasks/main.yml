@@ -1,7 +1,7 @@
 ---
 - name: Install xDebug
   sudo: yes
-  apt: pkg=php5-xdebug=2.3.2-1+deb.sury.org~trusty+1 state=present force=yes
+  apt: pkg=php5-xdebug state=present force=yes
 
 - name: Add xDebug cli ini file
   sudo: yes

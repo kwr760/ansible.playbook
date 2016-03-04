@@ -1,24 +1,25 @@
 - hosts: all
   sudo: true
   vars_files:
-    - vars/all.yml
+    - vars/apache.yml
+    - vars/mysql.yml
+    - vars/php.yml
+    - vars/server.yml
+    - vars/xdebug.yml
   roles:
     - apache
-    - app
     - chrome
     - code-quality
-    - firefox
     - git
-    - isys
-    - java8
     - memcached
     - mysql
     - php
-    - postfix
-    - prop
-    - samba
-    - script
     - server
-    - vagrant_local
-
+    - ssh
     - xdebug
+  tasks:
+    - name: Add user royk
+      user: name=royk password=password shell=/bin/bash groups=sudo append=yes
+    - name: Setup | set user password
+      shell: usermod -p $(echo 'password' | openssl passwd -1 -stdin) royk
+      sudo: true
