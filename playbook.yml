@@ -14,12 +14,7 @@
     - memcached
     - mysql
     - php
+    - royk
     - server
     - ssh
     - xdebug
-  tasks:
-    - name: Add user royk
-      user: name=royk password=password shell=/bin/bash groups=sudo append=yes
-    - name: Setup | set user password
-      shell: usermod -p $(echo 'password' | openssl passwd -1 -stdin) royk
-      sudo: true
